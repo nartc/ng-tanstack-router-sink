@@ -15,10 +15,18 @@ import { Route as LoginImport } from './app/routes/login'
 import { Route as PathlessLayoutImport } from './app/routes/_pathlessLayout'
 import { Route as AuthImport } from './app/routes/_auth'
 import { Route as ExpensiveRouteImport } from './app/routes/expensive/route'
+import { Route as DashboardRouteImport } from './app/routes/dashboard/route'
 import { Route as IndexImport } from './app/routes/index'
+import { Route as DashboardIndexImport } from './app/routes/dashboard/index'
 import { Route as PathlessLayoutRouteBImport } from './app/routes/_pathlessLayout.route-b'
 import { Route as PathlessLayoutRouteAImport } from './app/routes/_pathlessLayout.route-a'
 import { Route as AuthProfileImport } from './app/routes/_auth.profile'
+import { Route as DashboardUsersRouteImport } from './app/routes/dashboard/users/route'
+import { Route as DashboardInvoicesRouteImport } from './app/routes/dashboard/invoices/route'
+import { Route as DashboardUsersIndexImport } from './app/routes/dashboard/users/index'
+import { Route as DashboardInvoicesIndexImport } from './app/routes/dashboard/invoices/index'
+import { Route as DashboardUsersUserImport } from './app/routes/dashboard/users/user'
+import { Route as DashboardInvoicesInvoiceIdImport } from './app/routes/dashboard/invoices/$invoiceId'
 
 // Create/Update Routes
 
@@ -46,10 +54,22 @@ const ExpensiveRouteRoute = ExpensiveRouteImport.update({
   import('./app/routes/expensive/route.lazy').then((d) => d.Route),
 )
 
+const DashboardRouteRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardIndexRoute = DashboardIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 
 const PathlessLayoutRouteBRoute = PathlessLayoutRouteBImport.update({
@@ -70,6 +90,44 @@ const AuthProfileRoute = AuthProfileImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
+const DashboardUsersRouteRoute = DashboardUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+
+const DashboardInvoicesRouteRoute = DashboardInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+
+const DashboardUsersIndexRoute = DashboardUsersIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardUsersRouteRoute,
+} as any)
+
+const DashboardInvoicesIndexRoute = DashboardInvoicesIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardInvoicesRouteRoute,
+} as any)
+
+const DashboardUsersUserRoute = DashboardUsersUserImport.update({
+  id: '/user',
+  path: '/user',
+  getParentRoute: () => DashboardUsersRouteRoute,
+} as any)
+
+const DashboardInvoicesInvoiceIdRoute = DashboardInvoicesInvoiceIdImport.update(
+  {
+    id: '/$invoiceId',
+    path: '/$invoiceId',
+    getParentRoute: () => DashboardInvoicesRouteRoute,
+  } as any,
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module 'tanstack-angular-router-experimental' {
@@ -79,6 +137,13 @@ declare module 'tanstack-angular-router-experimental' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRoute
     }
     '/expensive': {
@@ -109,6 +174,20 @@ declare module 'tanstack-angular-router-experimental' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/invoices': {
+      id: '/dashboard/invoices'
+      path: '/invoices'
+      fullPath: '/dashboard/invoices'
+      preLoaderRoute: typeof DashboardInvoicesRouteImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/dashboard/users': {
+      id: '/dashboard/users'
+      path: '/users'
+      fullPath: '/dashboard/users'
+      preLoaderRoute: typeof DashboardUsersRouteImport
+      parentRoute: typeof DashboardRouteImport
+    }
     '/_auth/profile': {
       id: '/_auth/profile'
       path: '/profile'
@@ -130,10 +209,90 @@ declare module 'tanstack-angular-router-experimental' {
       preLoaderRoute: typeof PathlessLayoutRouteBImport
       parentRoute: typeof PathlessLayoutImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/dashboard/invoices/$invoiceId': {
+      id: '/dashboard/invoices/$invoiceId'
+      path: '/$invoiceId'
+      fullPath: '/dashboard/invoices/$invoiceId'
+      preLoaderRoute: typeof DashboardInvoicesInvoiceIdImport
+      parentRoute: typeof DashboardInvoicesRouteImport
+    }
+    '/dashboard/users/user': {
+      id: '/dashboard/users/user'
+      path: '/user'
+      fullPath: '/dashboard/users/user'
+      preLoaderRoute: typeof DashboardUsersUserImport
+      parentRoute: typeof DashboardUsersRouteImport
+    }
+    '/dashboard/invoices/': {
+      id: '/dashboard/invoices/'
+      path: '/'
+      fullPath: '/dashboard/invoices/'
+      preLoaderRoute: typeof DashboardInvoicesIndexImport
+      parentRoute: typeof DashboardInvoicesRouteImport
+    }
+    '/dashboard/users/': {
+      id: '/dashboard/users/'
+      path: '/'
+      fullPath: '/dashboard/users/'
+      preLoaderRoute: typeof DashboardUsersIndexImport
+      parentRoute: typeof DashboardUsersRouteImport
+    }
   }
 }
 
 // Create and export the route tree
+
+interface DashboardInvoicesRouteRouteChildren {
+  DashboardInvoicesInvoiceIdRoute: typeof DashboardInvoicesInvoiceIdRoute
+  DashboardInvoicesIndexRoute: typeof DashboardInvoicesIndexRoute
+}
+
+const DashboardInvoicesRouteRouteChildren: DashboardInvoicesRouteRouteChildren =
+  {
+    DashboardInvoicesInvoiceIdRoute: DashboardInvoicesInvoiceIdRoute,
+    DashboardInvoicesIndexRoute: DashboardInvoicesIndexRoute,
+  }
+
+const DashboardInvoicesRouteRouteWithChildren =
+  DashboardInvoicesRouteRoute._addFileChildren(
+    DashboardInvoicesRouteRouteChildren,
+  )
+
+interface DashboardUsersRouteRouteChildren {
+  DashboardUsersUserRoute: typeof DashboardUsersUserRoute
+  DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
+}
+
+const DashboardUsersRouteRouteChildren: DashboardUsersRouteRouteChildren = {
+  DashboardUsersUserRoute: DashboardUsersUserRoute,
+  DashboardUsersIndexRoute: DashboardUsersIndexRoute,
+}
+
+const DashboardUsersRouteRouteWithChildren =
+  DashboardUsersRouteRoute._addFileChildren(DashboardUsersRouteRouteChildren)
+
+interface DashboardRouteRouteChildren {
+  DashboardInvoicesRouteRoute: typeof DashboardInvoicesRouteRouteWithChildren
+  DashboardUsersRouteRoute: typeof DashboardUsersRouteRouteWithChildren
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardInvoicesRouteRoute: DashboardInvoicesRouteRouteWithChildren,
+  DashboardUsersRouteRoute: DashboardUsersRouteRouteWithChildren,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
 
 interface AuthRouteChildren {
   AuthProfileRoute: typeof AuthProfileRoute
@@ -161,12 +320,20 @@ const PathlessLayoutRouteWithChildren = PathlessLayoutRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/expensive': typeof ExpensiveRouteRoute
   '': typeof PathlessLayoutRouteWithChildren
   '/login': typeof LoginRoute
+  '/dashboard/invoices': typeof DashboardInvoicesRouteRouteWithChildren
+  '/dashboard/users': typeof DashboardUsersRouteRouteWithChildren
   '/profile': typeof AuthProfileRoute
   '/route-a': typeof PathlessLayoutRouteARoute
   '/route-b': typeof PathlessLayoutRouteBRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/invoices/$invoiceId': typeof DashboardInvoicesInvoiceIdRoute
+  '/dashboard/users/user': typeof DashboardUsersUserRoute
+  '/dashboard/invoices/': typeof DashboardInvoicesIndexRoute
+  '/dashboard/users/': typeof DashboardUsersIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -177,23 +344,53 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthProfileRoute
   '/route-a': typeof PathlessLayoutRouteARoute
   '/route-b': typeof PathlessLayoutRouteBRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/invoices/$invoiceId': typeof DashboardInvoicesInvoiceIdRoute
+  '/dashboard/users/user': typeof DashboardUsersUserRoute
+  '/dashboard/invoices': typeof DashboardInvoicesIndexRoute
+  '/dashboard/users': typeof DashboardUsersIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/expensive': typeof ExpensiveRouteRoute
   '/_auth': typeof AuthRouteWithChildren
   '/_pathlessLayout': typeof PathlessLayoutRouteWithChildren
   '/login': typeof LoginRoute
+  '/dashboard/invoices': typeof DashboardInvoicesRouteRouteWithChildren
+  '/dashboard/users': typeof DashboardUsersRouteRouteWithChildren
   '/_auth/profile': typeof AuthProfileRoute
   '/_pathlessLayout/route-a': typeof PathlessLayoutRouteARoute
   '/_pathlessLayout/route-b': typeof PathlessLayoutRouteBRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/invoices/$invoiceId': typeof DashboardInvoicesInvoiceIdRoute
+  '/dashboard/users/user': typeof DashboardUsersUserRoute
+  '/dashboard/invoices/': typeof DashboardInvoicesIndexRoute
+  '/dashboard/users/': typeof DashboardUsersIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/expensive'
+    | ''
+    | '/login'
+    | '/dashboard/invoices'
+    | '/dashboard/users'
+    | '/profile'
+    | '/route-a'
+    | '/route-b'
+    | '/dashboard/'
+    | '/dashboard/invoices/$invoiceId'
+    | '/dashboard/users/user'
+    | '/dashboard/invoices/'
+    | '/dashboard/users/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
     | '/'
     | '/expensive'
     | ''
@@ -201,23 +398,35 @@ export interface FileRouteTypes {
     | '/profile'
     | '/route-a'
     | '/route-b'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/expensive' | '' | '/login' | '/profile' | '/route-a' | '/route-b'
+    | '/dashboard'
+    | '/dashboard/invoices/$invoiceId'
+    | '/dashboard/users/user'
+    | '/dashboard/invoices'
+    | '/dashboard/users'
   id:
     | '__root__'
     | '/'
+    | '/dashboard'
     | '/expensive'
     | '/_auth'
     | '/_pathlessLayout'
     | '/login'
+    | '/dashboard/invoices'
+    | '/dashboard/users'
     | '/_auth/profile'
     | '/_pathlessLayout/route-a'
     | '/_pathlessLayout/route-b'
+    | '/dashboard/'
+    | '/dashboard/invoices/$invoiceId'
+    | '/dashboard/users/user'
+    | '/dashboard/invoices/'
+    | '/dashboard/users/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   ExpensiveRouteRoute: typeof ExpensiveRouteRoute
   AuthRoute: typeof AuthRouteWithChildren
   PathlessLayoutRoute: typeof PathlessLayoutRouteWithChildren
@@ -226,6 +435,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   ExpensiveRouteRoute: ExpensiveRouteRoute,
   AuthRoute: AuthRouteWithChildren,
   PathlessLayoutRoute: PathlessLayoutRouteWithChildren,
@@ -243,6 +453,7 @@ export const routeTree = rootRoute
       "filePath": "__root.ts",
       "children": [
         "/",
+        "/dashboard",
         "/expensive",
         "/_auth",
         "/_pathlessLayout",
@@ -251,6 +462,14 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.ts"
+    },
+    "/dashboard": {
+      "filePath": "dashboard/route.ts",
+      "children": [
+        "/dashboard/invoices",
+        "/dashboard/users",
+        "/dashboard/"
+      ]
     },
     "/expensive": {
       "filePath": "expensive/route.ts"
@@ -271,6 +490,22 @@ export const routeTree = rootRoute
     "/login": {
       "filePath": "login.ts"
     },
+    "/dashboard/invoices": {
+      "filePath": "dashboard/invoices/route.ts",
+      "parent": "/dashboard",
+      "children": [
+        "/dashboard/invoices/$invoiceId",
+        "/dashboard/invoices/"
+      ]
+    },
+    "/dashboard/users": {
+      "filePath": "dashboard/users/route.ts",
+      "parent": "/dashboard",
+      "children": [
+        "/dashboard/users/user",
+        "/dashboard/users/"
+      ]
+    },
     "/_auth/profile": {
       "filePath": "_auth.profile.ts",
       "parent": "/_auth"
@@ -282,6 +517,26 @@ export const routeTree = rootRoute
     "/_pathlessLayout/route-b": {
       "filePath": "_pathlessLayout.route-b.ts",
       "parent": "/_pathlessLayout"
+    },
+    "/dashboard/": {
+      "filePath": "dashboard/index.ts",
+      "parent": "/dashboard"
+    },
+    "/dashboard/invoices/$invoiceId": {
+      "filePath": "dashboard/invoices/$invoiceId.ts",
+      "parent": "/dashboard/invoices"
+    },
+    "/dashboard/users/user": {
+      "filePath": "dashboard/users/user.ts",
+      "parent": "/dashboard/users"
+    },
+    "/dashboard/invoices/": {
+      "filePath": "dashboard/invoices/index.ts",
+      "parent": "/dashboard/invoices"
+    },
+    "/dashboard/users/": {
+      "filePath": "dashboard/users/index.ts",
+      "parent": "/dashboard/users"
     }
   }
 }

@@ -18,8 +18,19 @@ export class Spinner {
 	protected hostClass = computed(() => {
 		const [show, wait] = [this.show(), this.wait()]
 		if (show) {
-			return `opacity-1 duration-500 ${wait ?? 'delay-300'}`
+			return `opacity-100 duration-500 ${wait ?? 'delay-300'}`
 		}
 		return `duration-500 opacity-0 delay-0`
 	})
 }
+
+@Component({
+	selector: 'DefaultPending',
+	template: `
+		<Spinner />
+	`,
+	host: { class: 'block p-2 text-2xl' },
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [Spinner],
+})
+export class DefaultPending {}

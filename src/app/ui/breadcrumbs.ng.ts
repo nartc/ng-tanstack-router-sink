@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { isMatch, Link, matches } from 'tanstack-angular-router-experimental'
 
 @Component({
@@ -26,8 +26,7 @@ export class Breadcrumbs {
 	protected isPending = matches({
 		select: (matches) => matches.some((match) => match.status === 'pending'),
 	})
-	protected matchesWithCrumbs: Signal<any[]> = matches({
-		// @ts-expect-error - no type yet
+	protected matchesWithCrumbs = matches({
 		select: (matches) => matches.filter((match) => isMatch(match, 'loaderData.crumb')),
 	})
 }

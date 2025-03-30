@@ -58,7 +58,7 @@ export class Root {
 	protected routes = [
 		{ to: '/', label: 'Home' },
 		{ to: '/expensive', label: 'Expensive' },
-		// { to: '/dashboard', label: 'Dashboard' },
+		{ to: '/dashboard', label: 'Dashboard' },
 		{ to: '/route-a', label: 'Pathless Layout A' },
 		{ to: '/route-b', label: 'Pathless Layout B' },
 		{ to: '/profile', label: 'Profile' },
