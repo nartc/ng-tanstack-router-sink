@@ -1,11 +1,12 @@
 import { Component } from '@angular/core'
-import { RouterRoot } from 'tanstack-angular-router-experimental'
+import { RouterDevtools, RouterRoot } from 'tanstack-angular-router-experimental'
 
 @Component({
 	selector: 'app-root',
 	template: `
 		<RouterRoot />
+		<RouterDevtools />
 	`,
-	imports: [RouterRoot],
+	imports: [RouterRoot, RouterDevtools],
 })
 export class AppComponent {}
