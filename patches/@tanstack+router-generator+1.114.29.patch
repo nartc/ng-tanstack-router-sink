@@ -1,0 +1,122 @@
+diff --git a/node_modules/@tanstack/router-generator/dist/cjs/template.cjs b/node_modules/@tanstack/router-generator/dist/cjs/template.cjs
+index fe0b8ca..669195f 100644
+--- a/node_modules/@tanstack/router-generator/dist/cjs/template.cjs
++++ b/node_modules/@tanstack/router-generator/dist/cjs/template.cjs
+@@ -13,31 +13,43 @@ function getTargetTemplate(target) {
+     // TODO: Remove this disabled eslint rule when more target types are added.
+     case "react":
+       return {
+-        fullPkg: "@tanstack/react-router",
+-        subPkg: "react-router",
++        fullPkg: "tanstack-angular-router-experimental",
++        subPkg: "tanstack-angular-router-experimental",
+         rootRoute: {
+           template: () => [
+-            'import * as React from "react"\n',
+-            "%%tsrImports%%",
+-            "\n\n",
+-            "%%tsrExportStart%%{\n component: RootComponent\n }%%tsrExportEnd%%\n\n",
+-            'function RootComponent() { return (<React.Fragment><div>Hello "%%tsrPath%%"!</div><Outlet /></React.Fragment>) };\n'
++            'import { Component, ChangeDetectionStrategy } from "@angular/core";',
++            '%%tsrImports%%',
++            '\n\n',
++            '%%tsrExportStart%%{\n component: () => Page\n }%%tsrExportEnd%%\n\n',
++            '@Component({\n',
++            'selector: "Root",\n',
++            'template: `<div>Hello %%tsrPath%%!</div><outlet />`,\n',
++            'imports: [Outlet],\n',
++            'changeDetection: ChangeDetectionStrategy.OnPush\n',
++            '})\n',
++            'export class Root {}'
+           ].join(""),
+           imports: {
+-            tsrImports: () => "import { Outlet, createRootRoute } from '@tanstack/react-router';",
++            tsrImports: () => "import { Outlet, createRootRoute } from 'tanstack-angular-router-experimental';",
+             tsrExportStart: () => "export const Route = createRootRoute(",
+-            tsrExportEnd: () => ");"
++            tsrExportEnd: () => ")"
+           }
+         },
+         route: {
+           template: () => [
+-            "%%tsrImports%%",
++            'import { Component, ChangeDetectionStrategy } from "@angular/core";',
++            '%%tsrImports%%',
+             "\n\n",
+-            "%%tsrExportStart%%{\n component: RouteComponent\n }%%tsrExportEnd%%\n\n",
+-            'function RouteComponent() { return <div>Hello "%%tsrPath%%"!</div> };\n'
++            "%%tsrExportStart%%{\n component: () => NewPage\n }%%tsrExportEnd%%\n\n",
++            '@Component({\n',
++            'selector: "NewPage",\n',
++            'template: `<div>Hello %%tsrPath%%!</div>`,\n',
++            'changeDetection: ChangeDetectionStrategy.OnPush\n',
++            '})\n',
++            'export class NewPage {}'
+           ].join(""),
+           imports: {
+-            tsrImports: () => "import { createFileRoute } from '@tanstack/react-router';",
++            tsrImports: () => "import { createFileRoute } from 'tanstack-angular-router-experimental';",
+             tsrExportStart: (routePath) => `export const Route = createFileRoute('${routePath}')(`,
+             tsrExportEnd: () => ");"
+           }
+diff --git a/node_modules/@tanstack/router-generator/dist/esm/template.js b/node_modules/@tanstack/router-generator/dist/esm/template.js
+index febf933..3b4ba53 100644
+--- a/node_modules/@tanstack/router-generator/dist/esm/template.js
++++ b/node_modules/@tanstack/router-generator/dist/esm/template.js
+@@ -11,31 +11,43 @@ function getTargetTemplate(target) {
+     // TODO: Remove this disabled eslint rule when more target types are added.
+     case "react":
+       return {
+-        fullPkg: "@tanstack/react-router",
+-        subPkg: "react-router",
++        fullPkg: "tanstack-angular-router-experimental",
++        subPkg: "tanstack-angular-router-experimental",
+         rootRoute: {
+           template: () => [
+-            'import * as React from "react"\n',
+-            "%%tsrImports%%",
+-            "\n\n",
+-            "%%tsrExportStart%%{\n component: RootComponent\n }%%tsrExportEnd%%\n\n",
+-            'function RootComponent() { return (<React.Fragment><div>Hello "%%tsrPath%%"!</div><Outlet /></React.Fragment>) };\n'
++            'import { Component, ChangeDetectionStrategy } from "@angular/core";',
++            '%%tsrImports%%',
++            '\n\n',
++            '%%tsrExportStart%%{\n component: () => Page\n }%%tsrExportEnd%%\n\n',
++            '@Component({\n',
++            'selector: "Root",\n',
++            'template: `<div>Hello %%tsrPath%%!</div><outlet />`,\n',
++            'imports: [Outlet],\n',
++            'changeDetectionStrategy: ChangeDetectionStrategy.OnPush\n',
++            '})\n',
++            'export class Root {}'
+           ].join(""),
+           imports: {
+-            tsrImports: () => "import { Outlet, createRootRoute } from '@tanstack/react-router';",
++            tsrImports: () => "import { Outlet, createRootRoute } from 'tanstack-angular-router-experimental';",
+             tsrExportStart: () => "export const Route = createRootRoute(",
+-            tsrExportEnd: () => ");"
++            tsrExportEnd: () => ")"
+           }
+         },
+         route: {
+           template: () => [
+-            "%%tsrImports%%",
++            'import { Component, ChangeDetectionStrategy } from "@angular/core";',
++            '%%tsrImports%%',
+             "\n\n",
+-            "%%tsrExportStart%%{\n component: RouteComponent\n }%%tsrExportEnd%%\n\n",
+-            'function RouteComponent() { return <div>Hello "%%tsrPath%%"!</div> };\n'
++            "%%tsrExportStart%%{\n component: () => NewPage\n }%%tsrExportEnd%%\n\n",
++            '@Component({\n',
++            'selector: "NewPage",\n',
++            'template: `<div>Hello %%tsrPath%%!</div>`,\n',
++            'changeDetection: ChangeDetectionStrategy.OnPush\n',
++            '})\n',
++            'export class NewPage {}'
+           ].join(""),
+           imports: {
+-            tsrImports: () => "import { createFileRoute } from '@tanstack/react-router';",
++            tsrImports: () => "import { createFileRoute } from 'tanstack-angular-router-experimental';",
+             tsrExportStart: (routePath) => `export const Route = createFileRoute('${routePath}')(`,
+             tsrExportEnd: () => ");"
+           }
