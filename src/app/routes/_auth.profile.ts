@@ -9,10 +9,8 @@ export const Route = createFileRoute('/_auth/profile')({
 @Component({
 	selector: 'Profile',
 	template: `
-		<div>
-			Username:
-			<strong>{{ username() }}</strong>
-		</div>
+		Username:
+		<strong>{{ username() }}</strong>
 	`,
 	host: { class: 'block p-2 space-y-2' },
 	changeDetection: ChangeDetectionStrategy.OnPush,

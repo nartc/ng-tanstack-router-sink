@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { Link, Outlet, createRootRoute, routerState } from 'tanstack-angular-router-experimental'
+import { Link, Outlet, RouterDevtools, createRootRoute, routerState } from 'tanstack-angular-router-experimental'
 import { Breadcrumbs } from '../ui/breadcrumbs.ng'
 import { Spinner } from '../ui/spinner.ng'
 
@@ -12,6 +12,7 @@ export const Route = createRootRoute({
 	template: `
 		<Spinner [show]="isLoading()" />
 	`,
+	host: { class: 'block text-3xl' },
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [Spinner],
 })
@@ -26,9 +27,7 @@ export class RouterSpinner {
 			<div class="flex items-center gap-2 border-b">
 				<h1 class="p-2 text-3xl">Kitchen Sink</h1>
 				<nav breadcrumbs></nav>
-				<div class="text-3xl">
-					<RouterSpinner />
-				</div>
+				<RouterSpinner />
 			</div>
 			<div class="flex flex-1">
 				<div class="w-56 divide-y">
@@ -50,8 +49,9 @@ export class RouterSpinner {
 				</div>
 			</div>
 		</div>
+		<RouterDevtools position="bottom-right" />
 	`,
-	imports: [Outlet, RouterSpinner, Link, Breadcrumbs],
+	imports: [Outlet, RouterSpinner, Link, Breadcrumbs, RouterDevtools],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Root {

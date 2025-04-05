@@ -1,11 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, untracked } from '@angular/core'
-import { MatchRoute } from 'tanstack-angular-router-experimental'
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core'
 
 @Component({
 	selector: 'Spinner',
-	template: `
-		⍥
-	`,
+	template: '⍥',
 	host: {
 		class: 'inline-block animate-spin px-3 transition duration-500',
 		'[class]': 'hostClass()',
@@ -15,7 +12,6 @@ import { MatchRoute } from 'tanstack-angular-router-experimental'
 export class Spinner {
 	show = input(true)
 	wait = input<`delay-${number}`>('delay-300')
-
 
 	protected hostClass = computed(() => {
 		const [show, wait] = [this.show(), this.wait()]

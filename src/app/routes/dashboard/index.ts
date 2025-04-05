@@ -15,11 +15,9 @@ export const Route = createFileRoute('/dashboard/')({
 @Component({
 	selector: 'Dashboard',
 	template: `
-		<div class="p-2">
-			Welcome to the dashboard! You have
-			<strong>{{ loaderData().invoices.length }} total invoices</strong>
-			.
-		</div>
+		Welcome to the dashboard! You have
+		<strong>{{ loaderData().invoices.length }} total invoices</strong>
+		.
 	`,
 	host: { class: 'block p-2' },
 	changeDetection: ChangeDetectionStrategy.OnPush,

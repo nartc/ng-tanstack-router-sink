@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core'
-import { AnyRouter, createRouter, provideRouter } from 'tanstack-angular-router-experimental'
+import { createRouter, provideRouter } from 'tanstack-angular-router-experimental'
 import { routeTree } from '../routeTree.gen'
 import { DefaultPending } from './ui/spinner.ng'
 
@@ -17,5 +17,5 @@ declare module 'tanstack-angular-router-experimental' {
 }
 
 export const appConfig: ApplicationConfig = {
-	providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(router as AnyRouter)],
+	providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(router)],
 }
