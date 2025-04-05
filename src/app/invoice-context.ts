@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core'
+import { DOCUMENT } from '@angular/common'
+import { inject, Injectable, signal } from '@angular/core'
 import { PickAsRequired } from '@tanstack/router-core'
 import { shuffle } from './shuffle'
 
@@ -12,7 +13,13 @@ export type Invoice = {
 export class InvoiceContext {
 	invoices = signal<Invoice[]>([])
 
+	private document = inject(DOCUMENT)
+	private window = this.document.defaultView as globalThis.Window
+
 	async getInvoices() {
+		const delay = Number(this.window.sessionStorage.getItem('loaderDelay') ?? '0')
+		await new Promise((resolve) => setTimeout(resolve, delay))
+
 		if (this.invoices().length > 0) {
 			return this.invoices()
 		}
@@ -35,6 +42,9 @@ export class InvoiceContext {
 	}
 
 	async createInvoice(partialInvoice: Partial<Invoice>) {
+		const delay = Number(this.window.sessionStorage.getItem('loaderDelay') ?? '0')
+		await new Promise((resolve) => setTimeout(resolve, delay))
+
 		if (partialInvoice.title?.includes('error')) {
 			console.error('error')
 			throw new Error('Ouch!')
@@ -58,6 +68,9 @@ export class InvoiceContext {
 	}
 
 	async patchInvoice({ id, ...updatedInvoice }: PickAsRequired<Partial<Invoice>, 'id'>) {
+		const delay = Number(this.window.sessionStorage.getItem('loaderDelay') ?? '0')
+		await new Promise((resolve) => setTimeout(resolve, delay))
+
 		const invoice = this.invoices().find((d) => d.id === id)
 		if (!invoice) {
 			throw new Error('Invoice not found.')

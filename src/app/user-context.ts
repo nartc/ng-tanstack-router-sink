@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core'
+import { DOCUMENT } from '@angular/common'
+import { inject, Injectable, signal } from '@angular/core'
 
 export interface User {
 	id: number
@@ -35,8 +36,13 @@ export type UsersSortBy = 'name' | 'id' | 'email'
 @Injectable()
 export class UserContext {
 	users = signal<User[]>([])
+	private document = inject(DOCUMENT)
+	private window = this.document.defaultView as globalThis.Window
 
 	async getUsers({ filterBy, sortBy }: { filterBy?: string; sortBy?: UsersSortBy }) {
+		const delay = Number(this.window.sessionStorage.getItem('loaderDelay') ?? '0')
+		await new Promise((resolve) => setTimeout(resolve, delay))
+
 		let users: User[]
 
 		if (this.users().length > 0) {
@@ -60,6 +66,8 @@ export class UserContext {
 	}
 
 	async getUser(id: number) {
+		const delay = Number(this.window.sessionStorage.getItem('loaderDelay') ?? '0')
+		await new Promise((resolve) => setTimeout(resolve, delay))
 		return this.users().find((d) => d.id === id)
 	}
 }
