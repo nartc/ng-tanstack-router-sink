@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, linkedSignal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
 import {
 	createFileRoute,
 	injectRouter,
@@ -9,7 +9,7 @@ import {
 } from 'tanstack-angular-router-experimental'
 import { object, optional, picklist, string } from 'valibot'
 import { Spinner } from '../../../ui/spinner.ng'
-import { UserContext } from '../../../user-context'
+import { UserContext, UsersSortBy } from '../../../user-context'
 
 export const Route = createFileRoute('/dashboard/users')({
 	validateSearch: object({
@@ -43,8 +43,8 @@ export const Route = createFileRoute('/dashboard/users')({
 				<div>Sort By:</div>
 				<select
 					#sortBySelect
-					[value]="sortBy()"
-					(change)="sortBy.set($any(sortBySelect.value))"
+					[value]="search().usersView?.sortBy ?? 'id'"
+					(change)="onSort(sortBySelect.value)"
 					class="flex-1 rounded border p-1 px-2"
 				>
 					<option value="name">Name</option>
@@ -56,8 +56,8 @@ export const Route = createFileRoute('/dashboard/users')({
 				<div>Filter By:</div>
 				<input
 					#filterByInput
-					[value]="filterBy()"
-					(change)="filterBy.set(filterByInput.value)"
+					[value]="search().usersView?.filterBy ?? ''"
+					(change)="onFilter(filterByInput.value)"
 					placeholder="Search Names..."
 					class="min-w-0 flex-1 rounded border p-1 px-2"
 				/>
@@ -72,7 +72,8 @@ export const Route = createFileRoute('/dashboard/users')({
 						}"
 						class="block px-3 py-2 text-blue-700"
 					>
-						<pre class="text-sm">{{ user.name }} <Spinner *matchRoute="{to: '/dashboard/users/user', search: {userId: user.id}, pending: true}; match as match" [show]="match()" wait="delay-500" /></pre>
+						<pre
+							class="text-sm">{{ user.name }} <Spinner *matchRoute="{to: '/dashboard/users/user', search: {userId: user.id}, pending: true}; match as match" [show]="match()" wait="delay-500" /></pre>
 					</a>
 				</div>
 			}
@@ -89,28 +90,21 @@ export class UsersLayout {
 	protected loaderData = Route.loaderData()
 	protected search = Route.search()
 
-	protected sortBy = linkedSignal(() => this.search().usersView?.sortBy ?? 'name')
-	protected filterBy = linkedSignal(() => this.search().usersView?.filterBy || '')
-
 	private router = injectRouter()
 
-	constructor() {
-		effect(() => {
-			const sortBy = this.sortBy()
-			void this.router.navigate({
-				from: Route.fullPath,
-				search: (prev) => ({ ...prev, usersView: { ...prev.usersView, sortBy } }),
-				replace: true,
-			})
+	protected onSort(sortBy: string) {
+		void this.router.navigate({
+			from: Route.fullPath,
+			search: (prev) => ({ ...prev, usersView: { ...prev.usersView, sortBy: sortBy as UsersSortBy } }),
+			replace: true,
 		})
+	}
 
-		effect(() => {
-			const filterBy = this.filterBy()
-			void this.router.navigate({
-				from: Route.fullPath,
-				search: (prev) => ({ ...prev, usersView: { ...prev.usersView, filterBy } }),
-				replace: true,
-			})
+	protected onFilter(filterBy: string) {
+		void this.router.navigate({
+			from: Route.fullPath,
+			search: (prev) => ({ ...prev, usersView: { ...prev.usersView, filterBy } }),
+			replace: true,
 		})
 	}
 }
