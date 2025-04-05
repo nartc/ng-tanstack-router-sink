@@ -62,7 +62,7 @@ export const Route = createFileRoute('/dashboard/users')({
 					class="min-w-0 flex-1 rounded border p-1 px-2"
 				/>
 			</div>
-			@for (user of loaderData().users.slice(0, 2); track user.id) {
+			@for (user of loaderData().users; track user.id) {
 				<div>
 					<a
 						[link]="{
