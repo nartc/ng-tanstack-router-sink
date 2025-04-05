@@ -23,7 +23,6 @@ export const Route = createFileRoute('/dashboard/users')({
 	search: {
 		middlewares: [retainSearchParams(['usersView'])],
 	},
-	component: () => UsersLayout,
 	loaderDeps: ({ search }) => ({
 		filterBy: search.usersView?.filterBy,
 		sortBy: search.usersView?.sortBy,
@@ -33,6 +32,7 @@ export const Route = createFileRoute('/dashboard/users')({
 		const users = await userContext.getUsers(deps)
 		return { users, crumb: 'Users' }
 	},
+	component: () => UsersLayout,
 })
 
 @Component({
