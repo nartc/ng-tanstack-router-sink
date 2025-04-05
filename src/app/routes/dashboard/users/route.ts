@@ -39,7 +39,7 @@ export const Route = createFileRoute('/dashboard/users')({
 	selector: 'UsersLayout',
 	template: `
 		<div class="divide-y">
-			<div class="flex items-center gap-2 bg-gray-100 px-3 py-2 dark:bg-gray-800">
+			<div class="flex items-center gap-2 bg-gray-100 px-3 py-2">
 				<div>Sort By:</div>
 				<select
 					#sortBySelect
@@ -52,7 +52,7 @@ export const Route = createFileRoute('/dashboard/users')({
 					<option value="email">Email</option>
 				</select>
 			</div>
-			<div class="flex items-center gap-2 bg-gray-100 px-3 py-2 dark:bg-gray-800">
+			<div class="flex items-center gap-2 bg-gray-100 px-3 py-2">
 				<div>Filter By:</div>
 				<input
 					#filterByInput
@@ -62,7 +62,7 @@ export const Route = createFileRoute('/dashboard/users')({
 					class="min-w-0 flex-1 rounded border p-1 px-2"
 				/>
 			</div>
-			@for (user of loaderData().users; track user.id) {
+			@for (user of loaderData().users.slice(0, 2); track user.id) {
 				<div>
 					<a
 						[link]="{
@@ -72,8 +72,7 @@ export const Route = createFileRoute('/dashboard/users')({
 						}"
 						class="block px-3 py-2 text-blue-700"
 					>
-						<pre
-							class="text-sm">{{ user.name }} <Spinner *matchRoute="{to: '/dashboard/users/user', search: {userId: user.id}, pending: true}; match as match" [show]="match" wait="delay-50" /></pre>
+						<pre class="text-sm">{{ user.name }} <Spinner *matchRoute="{to: '/dashboard/users/user', search: {userId: user.id}, pending: true}; match as match" [show]="match()" wait="delay-500" /></pre>
 					</a>
 				</div>
 			}

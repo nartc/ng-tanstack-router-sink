@@ -27,7 +27,7 @@ export const Route = createFileRoute('/dashboard/invoices')({
 					}"
 					class="block px-3 py-2 text-blue-700"
 				>
-					<pre># {{ invoice.id }} - {{ invoice.title.slice(0, 10) }}<Spinner *matchRoute="{ to: '/dashboard/invoices/$invoiceId', params: { invoiceId: invoice.id }, pending: true, };  match as match" [show]="match" wait="delay-50" /></pre>
+					<pre># {{ invoice.id }} - {{ invoice.title.slice(0, 10) }}<Spinner *matchRoute="{ to: '/dashboard/invoices/$invoiceId', params: { invoiceId: invoice.id }, pending: true, };  match as match" [show]="match()" wait="delay-50" /></pre>
 				</a>
 			}
 		</div>

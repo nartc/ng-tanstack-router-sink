@@ -10,10 +10,10 @@ export const Route = createFileRoute('/dashboard/invoices/$invoiceId')({
 		parse: (params) => ({ invoiceId: Number(params.invoiceId) }),
 		stringify: (params) => ({ invoiceId: `${params.invoiceId}` }),
 	},
-	validateSearch: object({
+	validateSearch: optional(object({
 		showNotes: optional(boolean()),
 		notes: optional(string()),
-	}),
+	})),
 	loader: async ({ params }) => {
 		const invoiceContext = inject(InvoiceContext)
 		const invoice = await invoiceContext.getInvoice(params.invoiceId)
@@ -31,7 +31,7 @@ export const Route = createFileRoute('/dashboard/invoices/$invoiceId')({
 				<a [link]="showNotesLinkOptions" class="text-blue-700">
 					{{ showNotesLinkOptions.label() }}
 				</a>
-				@if (search().showNotes) {
+				@if (search()?.showNotes) {
 					<div>
 						<div class="h-2"></div>
 						<textarea
@@ -89,13 +89,13 @@ export class Invoice {
 		void this.router.invalidate()
 	})
 
-	protected notes = signal(this.search().notes ?? '')
+	protected notes = signal(this.search()?.notes ?? '')
 	protected showNotesLinkOptions = linkOptions({
 		from: Route.fullPath,
 		to: Route.fullPath,
 		params: true,
-		label: () => (this.search().showNotes ? 'Close Notes' : 'Show Notes'),
-		search: (prev) => ({ ...prev, showNotes: prev.showNotes ? undefined : true }),
+		label: () => (this.search()?.showNotes ? 'Close Notes' : 'Show Notes'),
+		search: (prev) => ({ ...prev, showNotes: prev?.showNotes ? undefined : true }),
 	})
 
 	constructor() {
