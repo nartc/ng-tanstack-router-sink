@@ -10,6 +10,7 @@ export const Route = createFileRoute('/dashboard/users/user')({
 	}),
 	loaderDeps: ({ search: { userId } }) => ({ userId }),
 	loader: async ({ deps }) => {
+		console.log(deps)
 		const userContext = inject(UserContext)
 		const user = await userContext.getUser(deps.userId)
 		return { user, crumb: user?.name }

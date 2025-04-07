@@ -16,8 +16,7 @@ export const Route = createFileRoute('/dashboard/invoices')({
 	selector: 'InvoicesLayout',
 	template: `
 		<div class="w-48 divide-y">
-			@let invoices = loaderData().invoices;
-			@for (invoice of invoices; track invoice.id) {
+			@for (invoice of loaderData().invoices; track invoice.id) {
 				<a
 					[link]="{
 						to: '/dashboard/invoices/$invoiceId',
@@ -25,9 +24,19 @@ export const Route = createFileRoute('/dashboard/invoices')({
 						params: { invoiceId: invoice.id },
 						activeOptions: { class: 'font-bold' },
 					}"
-					class="block px-3 py-2 text-blue-700"
+					class="flex items-center gap-2 px-3 py-2 text-blue-700"
 				>
-					<pre># {{ invoice.id }} - {{ invoice.title.slice(0, 10) }}<Spinner *matchRoute="{ to: '/dashboard/invoices/$invoiceId', params: { invoiceId: invoice.id }, pending: true, };  match as match" [show]="match()" wait="delay-50" /></pre>
+					<pre># {{ invoice.id }} - {{ invoice.title.slice(0, 10) }}</pre>
+					<MatchRoute
+						#matchRoute
+						[match]="{
+							to: '/dashboard/invoices/$invoiceId',
+							params: { invoiceId: invoice.id },
+							pending: true,
+						}"
+					>
+						<Spinner [show]="matchRoute.match()" wait="delay-50" />
+					</MatchRoute>
 				</a>
 			}
 		</div>

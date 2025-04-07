@@ -10,10 +10,12 @@ export const Route = createFileRoute('/dashboard/invoices/$invoiceId')({
 		parse: (params) => ({ invoiceId: Number(params.invoiceId) }),
 		stringify: (params) => ({ invoiceId: `${params.invoiceId}` }),
 	},
-	validateSearch: optional(object({
-		showNotes: optional(boolean()),
-		notes: optional(string()),
-	})),
+	validateSearch: optional(
+		object({
+			showNotes: optional(boolean()),
+			notes: optional(string()),
+		}),
+	),
 	loader: async ({ params }) => {
 		const invoiceContext = inject(InvoiceContext)
 		const invoice = await invoiceContext.getInvoice(params.invoiceId)
@@ -25,13 +27,17 @@ export const Route = createFileRoute('/dashboard/invoices/$invoiceId')({
 @Component({
 	selector: 'Invoice',
 	template: `
+		@let loaderData = this.loaderData();
+		@let mutationStatus = mutation.status();
+		@let search = this.search();
+
 		<form (submit)="onSubmit($event)" class="space-y-2 p-2">
-			<InvoiceFields [invoice]="loaderData().invoice" [disabled]="mutation.status() === 'pending'" />
+			<InvoiceFields [invoice]="loaderData.invoice" [disabled]="mutationStatus === 'pending'" />
 			<div>
 				<a [link]="showNotesLinkOptions" class="text-blue-700">
 					{{ showNotesLinkOptions.label() }}
 				</a>
-				@if (search()?.showNotes) {
+				@if (search?.showNotes) {
 					<div>
 						<div class="h-2"></div>
 						<textarea
@@ -51,20 +57,20 @@ export const Route = createFileRoute('/dashboard/invoices/$invoiceId')({
 			<div>
 				<button
 					class="rounded bg-blue-500 p-2 font-black text-white uppercase disabled:opacity-50"
-					[disabled]="mutation.status() === 'pending'"
+					[disabled]="mutationStatus === 'pending'"
 				>
 					Save
 				</button>
 			</div>
-			@if (mutation.variables()?.id === loaderData().invoice.id) {
+			@if (mutation.variables()?.id === loaderData.invoice.id) {
 				<div>
-					@if (mutation.status() === 'success') {
+					@if (mutationStatus === 'success') {
 						<div
 							class="inline-block animate-bounce rounded bg-green-500 px-2 py-1 text-white [animation-duration:.3s] [animation-iteration-count:2.5]"
 						>
 							Saved!
 						</div>
-					} @else if (mutation.status() === 'error') {
+					} @else if (mutationStatus === 'error') {
 						<div
 							class="inline-block animate-bounce rounded bg-red-500 px-2 py-1 text-white [animation-duration:.3s] [animation-iteration-count:2.5]"
 						>

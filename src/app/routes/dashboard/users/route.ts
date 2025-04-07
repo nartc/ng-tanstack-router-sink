@@ -70,10 +70,15 @@ export const Route = createFileRoute('/dashboard/users')({
 							search: { userId: user.id },
 							activeOptions: { class: 'font-bold' },
 						}"
-						class="block px-3 py-2 text-blue-700"
+						class="flex items-center gap-2 px-3 py-2 text-blue-700"
 					>
-						<pre
-							class="text-sm">{{ user.name }} <Spinner *matchRoute="{to: '/dashboard/users/user', search: {userId: user.id}, pending: true}; match as match" [show]="match()" wait="delay-500" /></pre>
+						<pre class="text-sm">{{ user.name }}</pre>
+						<MatchRoute
+							#matchRoute
+							[match]="{ to: '/dashboard/users/user', search: { userId: user.id }, pending: true }"
+						>
+							<Spinner [show]="matchRoute.match()" wait="delay-500" />
+						</MatchRoute>
 					</a>
 				</div>
 			}

@@ -66,6 +66,10 @@ export class UserContext {
 	}
 
 	async getUser(id: number) {
+		if (this.users().length === 0) {
+			await this.getUsers({})
+		}
+
 		const delay = Number(this.window.sessionStorage.getItem('loaderDelay') ?? '0')
 		await new Promise((resolve) => setTimeout(resolve, delay))
 		return this.users().find((d) => d.id === id)
