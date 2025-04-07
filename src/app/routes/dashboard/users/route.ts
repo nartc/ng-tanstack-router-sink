@@ -73,9 +73,8 @@ export const Route = createFileRoute('/dashboard/users')({
 						class="flex items-center gap-2 px-3 py-2 text-blue-700"
 					>
 						<pre class="text-sm">{{ user.name }}</pre>
-						<MatchRoute #matchRoute [match]="{ pending: true }">
-							<Spinner [show]="matchRoute.match()" wait="delay-50" />
-						</MatchRoute>
+						<spinner #mr="matchRoute" [match]="{ pending: true }" [show]="mr.match()" wait="delay-50" />
+						<Spinner #mr="matchRoute" [match]="{ pending: true }" [show]="mr.match()" wait="delay-50" />
 					</a>
 				</div>
 			}
